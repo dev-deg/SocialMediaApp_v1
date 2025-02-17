@@ -2,8 +2,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SocialMediaApp_v1.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
+    builder.Configuration["Authentication:Google:ServiceAccountCredentials"]);
 
 //in the dev env, load secrets from the user secrets store
 if (builder.Environment.IsDevelopment())
@@ -35,6 +39,9 @@ builder.Services.AddAuthentication(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Register the Firestore repository
+builder.Services.AddScoped<FirestoreRepository>();
 
 var app = builder.Build();
 
