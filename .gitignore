@@ -5,7 +5,7 @@
 
 #Ignoring Google Cloud Creds
 ./SocialMediaApp_v1/pftc-2025-m-bf3b08b2425a.json
-
+./SocialMediaApp_v1-master/pftc-2025-m-bf3b08b2425a.json
 # User-specific files
 *.rsuser
 *.suo

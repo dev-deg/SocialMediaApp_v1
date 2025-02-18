@@ -3,9 +3,8 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <p>Hello @User.Identity.Name (@User.FindFirst("Email")?.Value)!</p>
-    }
+    <h1 class="display-4">Welcome to Social Space!</h1>
+    
+    <p>Please <a asp-controller="Account" asp-action="Login">login</a> to access the platform.</p>
+
 </div>

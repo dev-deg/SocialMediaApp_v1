@@ -15,6 +15,10 @@ namespace SocialMediaApp_v1.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Social");
+            }
             return View();
         }
 
