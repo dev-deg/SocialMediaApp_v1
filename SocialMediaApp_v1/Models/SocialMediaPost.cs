@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Google.Cloud.Firestore;
+using Newtonsoft.Json.Converters;
 
 namespace SocialMediaApp_v1.Models;
 
@@ -11,16 +12,13 @@ public class SocialMediaPost
     public string PostId { get; set; }
     
     [FirestoreProperty]
-    public string PostTile { get; set; }
+    public string PostContent { get; set; }
     
     [FirestoreProperty]
-    public string PostCaption { get; set; }
+    public string PostAuthor { get; set; }
     
-    [FirestoreProperty]
-    public string Author { get; set; }
-    
-    [FirestoreProperty]
-    public string Date { get; set; }
+    [FirestoreProperty(ConverterType = typeof(UnixSecondsConverter))]
+    public DateTimeOffset PostDate { get; set; }
     
     //TODO: Add an image/video
 }

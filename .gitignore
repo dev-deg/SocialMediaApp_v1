@@ -3,9 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+*.idea
+
 #Ignoring Google Cloud Creds
-./SocialMediaApp_v1/pftc-2025-m-bf3b08b2425a.json
-./SocialMediaApp_v1-master/pftc-2025-m-bf3b08b2425a.json
+./SocialMediaApp_v1/pftc-2025-m-220d7a18d712.json
+./SocialMediaApp_v1-master/pftc-2025-m-220d7a18d712.json
 # User-specific files
 *.rsuser
 *.suo

@@ -6,14 +6,8 @@ using SocialMediaApp_v1.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
-    builder.Configuration["Authentication:Google:ServiceAccountCredentials"]);
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", builder.Configuration["Authentication:Google:ServiceAccountCredentials"]);
 
-//in the dev env, load secrets from the user secrets store
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddUserSecrets<Program>();
-}
 
 builder.Services.AddAuthentication(options =>
 {

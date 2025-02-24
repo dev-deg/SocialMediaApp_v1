@@ -10,14 +10,10 @@
             <h2>Create a Post</h2>
         </div>
         <div class="card-body">
-            <form method="post" asp-action="CreatePost" enctype="multipart/form-data">
+            <form method="post" asp-controller="Social" asp-action="CreatePost" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="postTitle">Title</label>
-                    <input type="text" class="form-control" id="postTitle" name="PostTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="postCaption">Caption</label>
-                    <textarea class="form-control" id="postCaption" name="PostCaption" rows="3" required></textarea>
+                    <label for="PostContent">What's on your mind?</label>
+                    <textarea class="form-control" id="PostContent" name="PostContent" rows="3" required></textarea>
                 </div>
                 <p>Author: @User.Identity.Name</p>
                 <button type="submit" class="btn btn-primary">Post</button>
@@ -25,16 +21,16 @@
         </div>
     </div>
 
-    @* <div class="card-columns"> *@
-    @*     @foreach (var post in Model) *@
-    @*     { *@
-    @*         <div class="card mb-3"> *@
-    @*             <div class="card-body"> *@
-    @*                 <h5 class="card-title">@post.PostTile</h5> *@
-    @*                 <h6 class="card-subtitle mb-2 text-muted">By @post.Author on @post.Date</h6> *@
-    @*                 <p class="card-text">@post.PostCaption</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     } *@
-    @* </div> *@
+    <div class="card-columns">
+        @foreach (SocialMediaPost post in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">@Html.DisplayFor(item => post.PostContent)</p>
+                    <h6 class="card-subtitle mb-2 text-muted">By @Html.DisplayFor(item => post.PostAuthor) on 
+                        @Html.DisplayFor(item => post.PostDate.UtcDateTime)</h6>
+                </div>
+            </div>
+        }
+    </div>
 </div>
