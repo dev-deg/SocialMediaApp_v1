@@ -69,4 +69,38 @@ public class FileUploadService: IFileUploadService
             throw new ApplicationException("Unexpected error during file upload", ex);
         }
     }
+    
+    public async Task DeleteFileAsync(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            throw new ArgumentException("File name cannot be null or empty", nameof(fileName));
+        }
+
+        try
+        {
+            // Extract the file name from the full URL if needed
+            if (fileName.StartsWith("https://storage.googleapis.com/"))
+            {
+                // Format: https://storage.googleapis.com/bucket-name/file-name
+                var uri = new Uri(fileName);
+                fileName = Path.GetFileName(uri.LocalPath);
+            }
+
+            // Delete the file from Google Cloud Storage
+            await _storageClient.DeleteObjectAsync(_bucketName, fileName);
+        
+            _logger.LogInformation($"File {fileName} deleted from bucket {_bucketName}");
+        }
+        catch (Google.GoogleApiException googleEx)
+        {
+            _logger.LogError(googleEx, $"Google API error during file deletion: {googleEx.Message}");
+            throw new ApplicationException("Error deleting file from cloud storage", googleEx);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Unexpected error during file deletion: {ex.Message}");
+            throw new ApplicationException("Unexpected error during file deletion", ex);
+        }
+    }
 }

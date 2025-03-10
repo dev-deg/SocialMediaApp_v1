@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadProgress = document.getElementById('uploadProgress');
     const progressBar = uploadProgress.querySelector('.progress-bar');
     const postForm = document.getElementById('postForm');
+    const deleteButtons = document.querySelectorAll('.delete-post');
     
     // Show image preview when a file is selected
     imageUpload.addEventListener('change', function() {
@@ -97,4 +98,40 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please wait for the image to finish uploading');
         }
     });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+
+            if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                deletePost(postId);
+            }
+        });
+    });
+
+    function deletePost(postId) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/DeletePost', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // Reload the page to reflect the deleted post
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete post: ' + response.message);
+                }
+            } else {
+                alert('Error deleting post. Status: ' + xhr.status);
+            }
+        };
+
+        xhr.onerror = function() {
+            alert('Network error occurred while trying to delete the post');
+        };
+
+        xhr.send('postId=' + encodeURIComponent(postId));
+    }
 });

@@ -33,5 +33,40 @@ namespace SocialMediaApp_v1.DataAccess
             _logger.LogInformation($"All {posts.Count} posts retrieved from Firestore.");
             return posts;
         }
+        
+        public async Task<SocialMediaPost> GetPostById(string postId)
+        {
+            // Query for the specific post by ID
+            Query postQuery = _db.Collection("posts").WhereEqualTo("PostId", postId);
+            QuerySnapshot postSnapshot = await postQuery.GetSnapshotAsync();
+    
+            if (postSnapshot.Count > 0)
+            {
+                SocialMediaPost post = postSnapshot.Documents[0].ConvertTo<SocialMediaPost>();
+                _logger.LogInformation($"Post {postId} retrieved from Firestore.");
+                return post;
+            }
+    
+            _logger.LogWarning($"Post {postId} not found.");
+            return null;
+        }
+        
+        public async Task DeletePost(string postId)
+        {
+            // Find the post document by ID
+            Query postQuery = _db.Collection("posts").WhereEqualTo("PostId", postId);
+            QuerySnapshot postSnapshot = await postQuery.GetSnapshotAsync();
+    
+            if (postSnapshot.Count > 0)
+            {
+                // Delete the document from Firestore
+                await postSnapshot.Documents[0].Reference.DeleteAsync();
+                _logger.LogInformation($"Post {postId} deleted from Firestore.");
+            }
+            else
+            {
+                _logger.LogWarning($"Post {postId} not found for deletion.");
+            }
+        }
     }
 }

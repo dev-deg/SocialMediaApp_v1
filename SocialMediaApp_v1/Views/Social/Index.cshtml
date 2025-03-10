@@ -49,6 +49,12 @@
                     }
                     <h6 class="card-subtitle mb-2 text-muted">By @Html.DisplayFor(item => post.PostAuthor) on
                         @Html.DisplayFor(item => post.PostDate.UtcDateTime)</h6>
+
+                    @if (post.PostAuthor == User.Identity.Name)
+                    {
+                        <button type="button" class="btn btn-sm btn-danger delete-post"
+                                data-post-id="@post.PostId">Delete Post</button>
+                    }
                 </div>
             </div>
         }
