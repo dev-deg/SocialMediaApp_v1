@@ -2,19 +2,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaApp_v1.DataAccess;
 using SocialMediaApp_v1.Models;
+using SocialMediaApp_v1.Interfaces;
+using System.Threading.Tasks;
 
 namespace SocialMediaApp_v1.Controllers;
 
 public class SocialController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<SocialController> _logger;
     private FirestoreRepository _repo;
-    public SocialController(ILogger<HomeController> logger, FirestoreRepository repo)
+    private readonly IFileUploadService _fileUploadService;
+
+    public SocialController(
+        ILogger<SocialController> logger, 
+        FirestoreRepository repo,
+        IFileUploadService fileUploadService)
     {
         _logger = logger;
         _repo = repo;
+        _fileUploadService = fileUploadService;
     }
-    
+
     [Authorize]
     public IActionResult Index()
     {
@@ -30,5 +38,42 @@ public class SocialController : Controller
         post.PostDate = DateTimeOffset.UtcNow;
         await _repo.AddPost(post);
         return RedirectToAction("Index", "Social");
+    }
+    
+    [Authorize]
+    [HttpPost]
+    [Route("UploadImage")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest(new { success = false, message = "No file was uploaded" });
+            }
+
+            // Validate file type
+            string[] permittedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+            string fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            
+            if (!permittedExtensions.Contains(fileExtension))
+            {
+                return BadRequest(new { success = false, message = "Invalid file type" });
+            }
+
+            // Generate a unique filename
+            string fileName = $"{Guid.NewGuid()}{fileExtension}";
+            
+            // Upload file to Google Cloud Storage
+            string imageUrl = await _fileUploadService.UploadFileAsync(file, fileName);
+            
+            // Return the URL of the uploaded image
+            return Ok(new { success = true, imageUrl });
+        }
+        catch (ApplicationException ex)
+        {
+            _logger.LogError(ex, "Error uploading image");
+            return StatusCode(500, new { success = false, message = ex.Message });
+        }
     }
 }

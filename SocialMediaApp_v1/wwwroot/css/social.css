@@ -1,0 +1,44 @@
+/* wwwroot/css/social.css */
+.card-columns {
+    column-count: 1;
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 3;
+    }
+}
+
+#imagePreviewContainer {
+    position: relative;
+    max-width: 300px;
+    margin-bottom: 15px;
+}
+
+#imagePreview {
+    border: 1px solid #ddd;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+#removeImage {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.25rem 0.5rem;
+    opacity: 0.8;
+}
+
+#removeImage:hover {
+    opacity: 1;
+}
+
+.progress {
+    height: 10px;
+}

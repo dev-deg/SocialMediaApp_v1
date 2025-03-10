@@ -20,5 +20,8 @@ public class SocialMediaPost
     [FirestoreProperty(ConverterType = typeof(UnixSecondsConverter))]
     public DateTimeOffset PostDate { get; set; }
     
-    //TODO: Add an image/video
+    [FirestoreProperty]
+    public string ImageUrl { get; set; }
+    
+    public IFormFile Image {get; set;}
 }
