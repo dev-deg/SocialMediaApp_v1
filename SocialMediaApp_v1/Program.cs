@@ -39,6 +39,7 @@ builder.Services.AddControllersWithViews();
 //Register the Firestore repository
 builder.Services.AddScoped<FirestoreRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddSingleton<ICacheService, CacheService>();
 
 var app = builder.Build();
 
