@@ -6,11 +6,21 @@ using SocialMediaApp_v1.DataAccess;
 using SocialMediaApp_v1.Interfaces;
 using SocialMediaApp_v1.Services;
 
+//Step 1: Build the application
 var builder = WebApplication.CreateBuilder(args);
 
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", builder.Configuration["Authentication:Google:ServiceAccountCredentials"]);
 
 
+var loggerFactory = LoggerFactory.Create(logging =>
+{
+    logging.AddConsole();
+});
+var logger = loggerFactory.CreateLogger<SecretManagerService>();
+var secretService = new SecretManagerService(logger);
+await secretService.LoadSecretsAsync(builder.Configuration);
+
+//Step 3: Use the secrets to finalise the application configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -33,13 +43,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-
-//Register the Firestore repository
 builder.Services.AddScoped<FirestoreRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
+builder.Services.AddSingleton<ISecretManagerService, SecretManagerService>();
 
 var app = builder.Build();
 
