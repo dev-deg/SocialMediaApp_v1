@@ -6,6 +6,11 @@
 
 <div class="container mt-5">
     <div class="card mb-4">
+        <div class="card-body">
+            <button type="button" class="btn btn-warning" id="triggerPubSub">Trigger Pub Sub</button>
+        </div>
+    </div>
+    <div class="card mb-4">
         <div class="card-header">
             <h2>Create a Post</h2>
         </div>
@@ -15,22 +20,22 @@
                     <label for="PostContent">What's on your mind?</label>
                     <textarea class="form-control" id="PostContent" name="PostContent" rows="3" required></textarea>
                 </div>
-                
+
                 <div class="form-group mt-3">
                     <label for="imageUpload" class="d-block">Add an image</label>
                     <input type="file" id="imageUpload" name="file" class="form-control-file" accept=".jpg,.jpeg,.png,.gif">
                     <input type="hidden" id="imageUrl" name="ImageUrl">
                 </div>
-                
+
                 <div id="imagePreviewContainer" class="mt-3 d-none">
                     <img id="imagePreview" class="img-fluid rounded" style="max-height: 200px;" alt="Preview">
                     <button type="button" id="removeImage" class="btn btn-sm btn-danger mt-2">Remove Image</button>
                 </div>
-                
+
                 <div id="uploadProgress" class="progress mt-3 d-none">
                     <div class="progress-bar" role="progressbar" style="width: 0%"></div>
                 </div>
-                
+
                 <p class="mt-3">Author: @User.Identity.Name</p>
                 <button type="submit" class="btn btn-primary" id="submitPost">Post</button>
             </form>
@@ -63,4 +68,5 @@
 
 @section Scripts {
     <script src="~/js/imageUpload.js"></script>
+    <script src="~/js/pubsub.js"></script>
 }

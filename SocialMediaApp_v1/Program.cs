@@ -71,7 +71,8 @@ try
     builder.Services.AddScoped<FirestoreRepository>();
     builder.Services.AddScoped<IFileUploadService, FileUploadService>();
     builder.Services.AddSingleton<ICacheService, CacheService>();
-
+    builder.Services.AddScoped<IPubSubService, PubSubService>();
+    
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
